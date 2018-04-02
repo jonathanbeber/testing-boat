@@ -5,7 +5,7 @@ services:
     environment:
       - DISPLAY=${DISPLAY}
     volumes:
-      - ./functional-tests:/home/developer
+      - ./functional-tests:/home/developer/functional-tests
       - /tmp/.X11-unix:/tmp/.X11-unix
   web-app:
     build: web-app/.
