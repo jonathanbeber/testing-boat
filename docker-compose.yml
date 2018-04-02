@@ -1,0 +1,16 @@
+version: '3'
+services:
+  functional-tests:
+    build: functional-tests/.
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ./functional-tests:/home/developer
+      - /tmp/.X11-unix:/tmp/.X11-unix
+  web-app:
+    build: web-app/.
+    volumes:
+       - ./web-app:/usr/src/app
+    ports:
+       - 8000:8000
+
