@@ -1,32 +1,47 @@
 import os
 import time
+
+import unittest
+
 from selenium import webdriver
 
-host_address = os.environ.get("HOST_ADDRESS", 'localhost')
 
-options = webdriver.ChromeOptions()
+class NewVisitorTest(unittest.TestCase):
+    def setUp(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        self.browser = webdriver.Chrome('./chromedriver', options=options)
+        self.host_address = os.environ.get('HOST_ADDRESS', 'localhost')
 
-options.add_argument('--no-sandbox')
-browser = webdriver.Chrome('./chromedriver', options=options)
-# Enter the site
-browser.get('http://{}:8000'.format(host_address))
 
-# check the site's title
-assert 'To-Do' in browser.title
+    def tearDown(self):
+        self.browser.quit()
 
-# Insert text 'buy milk' in the new item box
 
-# confirm the action
+    def test_include_a_list_and_get_a_permanent_link(self):
+        # Enter the site
+        self.browser.get(
+            'http://{}:8000'.format(self.host_address)
+        )
 
-# Check if the item is in the page
+        # check the site's title
+        self.assertIn('To-Do', self.browser.title)
 
-# Insert new item 'Clean the car'
+        self.fail('Finish it!')
+        # Insert text 'buy milk' in the new item box
 
-# check if the new item is in the page
+        # confirm the action
 
-# Go to personal URL
+        # Check if the item is in the page
 
-# check if 'buy milk' and 'Clean the car' are in a to-do list
+        # Insert new item 'Clean the car'
 
-# exit
-browser.exit()
+        # check if the new item is in the page
+
+        # Go to personal URL
+
+        # check if 'buy milk' and 'Clean the car' are in a to-do list
+
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
