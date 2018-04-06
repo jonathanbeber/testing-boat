@@ -45,9 +45,10 @@ class NewVisitorTest(unittest.TestCase):
 
         # Check if the item is in the page
         todo_list = self.browser.find_element_by_id('todo-list')
-        rows = todo_list.find_elements_by_tag_name('<tr>')
-        selg.assertTrue(
-            any(row == "1. buy milk" for row in rows)
+        rows = todo_list.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == "1. buy milk" for row in rows),
+            'To-do item not found'
         )
 
         self.fail('Finish it!')
