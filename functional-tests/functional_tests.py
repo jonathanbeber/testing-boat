@@ -54,18 +54,19 @@ class NewVisitorTest(unittest.TestCase):
         )
 
         # Insert text 'buy milk' in the new item box
-        text = 'buy milk'
-        _set_new_item(text)
+        first_task_text = 'buy milk'
+        _set_new_item(first_task_text)
 
         # Check if the item is in the page
-        _check_item('1. ' + text)
+        _check_item('1. ' + first_task_text)
 
         # Insert new item 'Clean the car'
-        text = 'Clean the car'
-        _set_new_item(text)
+        second_task_text = 'Clean the car'
+        _set_new_item(second_task_text)
 
         # check if the new item is in the page
-        _check_item('2. ' + text)
+        _check_item('1. ' + first_task_text)
+        _check_item('2. ' + second_task_text)
 
         self.fail('Finish it!')
         # Go to personal URL
