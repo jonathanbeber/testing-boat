@@ -19,6 +19,22 @@ class NewVisitorTest(unittest.TestCase):
 
 
     def test_include_a_list_and_get_a_permanent_link(self):
+        def _get_input_box():
+            return self.browser.find_element_by_id("new-item-box")
+
+
+        def _set_new_item(text):
+            input_box = _get_input_box()
+            input_box.send_keys(text)
+            input_box.send_keys(Keys.ENTER)
+            time.sleep(1)
+
+
+        def _check_item(text):
+            todo_list = self.browser.find_element_by_id('todo-list')
+            rows = todo_list.find_elements_by_tag_name('tr')
+            self.assertIn(text, [row.text for row in rows])
+
         # Enter the site
         self.browser.get(
             'http://{}:8000'.format(self.host_address)
@@ -31,31 +47,27 @@ class NewVisitorTest(unittest.TestCase):
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do List', header_text)
 
-        # Insert text 'buy milk' in the new item box
-        input_box = self.browser.find_element_by_id("new-item-box")
+        # check input box placeholder
         self.assertEqual(
-            input_box.get_attribute('placeholder'),
+            _get_input_box().get_attribute('placeholder'),
             'insert a new item'
         )
-        input_box.send_keys('buy milk')
 
-        # confirm the action
-        input_box.send_keys(Keys.ENTER)
-        time.sleep(1)
+        # Insert text 'buy milk' in the new item box
+        text = 'buy milk'
+        _set_new_item(text)
 
         # Check if the item is in the page
-        todo_list = self.browser.find_element_by_id('todo-list')
-        rows = todo_list.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == "1. buy milk" for row in rows),
-            'To-do item not found'
-        )
+        _check_item('1. ' + text)
 
-        self.fail('Finish it!')
         # Insert new item 'Clean the car'
+        text = 'Clean the car'
+        _set_new_item(text)
 
         # check if the new item is in the page
+        _check_item('2. ' + text)
 
+        self.fail('Finish it!')
         # Go to personal URL
 
         # check if 'buy milk' and 'Clean the car' are in a to-do list
