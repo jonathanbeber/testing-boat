@@ -22,4 +22,4 @@ WORKDIR /home/developer
 
 COPY chromedriver .
 
-CMD export HOST_ADDRESS=$(ip r | sed 's/default via \(.*\) dev .*$/\1/g;t;d'); python3 functional-tests/functional_tests.py
+CMD cd app/; python3 manage.py test functional_tests

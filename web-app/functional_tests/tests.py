@@ -1,17 +1,17 @@
 import os
 import time
 
-import unittest
+from django.test import LiveServerTestCase
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-class NewVisitorTest(unittest.TestCase):
+
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
-        self.browser = webdriver.Chrome('./chromedriver', options=options)
-        self.host_address = os.environ.get('HOST_ADDRESS', 'localhost')
+        self.browser = webdriver.Chrome('/home/developer/chromedriver', options=options)
 
 
     def tearDown(self):
@@ -36,9 +36,7 @@ class NewVisitorTest(unittest.TestCase):
             self.assertIn(text, [row.text for row in rows])
 
         # Enter the site
-        self.browser.get(
-            'http://{}:8000'.format(self.host_address)
-        )
+        self.browser.get(self.live_server_url)
 
         # check the site's title
         self.assertIn('To-Do List', self.browser.title)
@@ -72,7 +70,3 @@ class NewVisitorTest(unittest.TestCase):
         # Go to personal URL
 
         # check if 'buy milk' and 'Clean the car' are in a to-do list
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
