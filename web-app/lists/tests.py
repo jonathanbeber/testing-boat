@@ -25,7 +25,14 @@ class HomePageTest(TestCase):
     def test_redirect_after_POST(self):
         response = self.client.post('/', data={'new-item': 'buy milk'})
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/list/the-only-existing-list')
+
+
+class ListViewTest(TestCase):
+    def test_view_list(self):
+        response = self.client.get('/list/the-only-existing-list')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'list.html')
 
 
     def test_all_items_are_displayed(self):
@@ -34,7 +41,7 @@ class HomePageTest(TestCase):
         self.client.post('/', data={'new-item': first_item_text})
         self.client.post('/', data={'new-item': second_item_text})
 
-        response_text = self.client.get('/').content.decode()
+        response_text = self.client.get('/list/the-only-existing-list').content.decode()
         self.assertIn(first_item_text, response_text)
         self.assertIn(second_item_text, response_text)
 

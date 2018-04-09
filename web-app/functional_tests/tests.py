@@ -53,7 +53,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # check the site header
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do List', header_text)
+        self.assertIn('Start your new To-Do List', header_text)
 
         # check input box placeholder
         self.assertEqual(
@@ -103,12 +103,6 @@ class NewVisitorTest(LiveServerTestCase):
 
         # New user visits the site
         self.browser.get(self.live_server_url)
-
-        # check user a's item is not there
-        self.assertNotIn(
-            '1. ' + user_a_item_text,
-            [row.text for row in self._get_todo_rows()]
-        )
 
         # Add a new item
         user_b_item_text = 'some boring task'
