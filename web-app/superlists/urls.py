@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from lists.views import home_page, view_list
+from lists.views import home_page, view_list, new_item
 
 urlpatterns = [
     url(r'^$', home_page, name='home'),
     url(r'^list/the-only-existing-list$', view_list, name='view_list'),
+    url(r'^list/the-only-existing-list/new_item$', new_item, name='new_item')
 ]
