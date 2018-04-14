@@ -15,26 +15,42 @@ class HomePageTest(TestCase):
 
 class ListViewTest(TestCase):
     def test_view_list(self):
-        response = self.client.get('/list/the-only-existing-list')
+        list_ = List.objects.create()
+        response = self.client.get(f'/list/{list_.id}/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list.html')
 
 
-    def test_all_items_are_displayed(self):
+    def test_just_list_items_are_displayed(self):
         first_item_text = 'item 1'
         second_item_text = 'item 2'
-        self.client.post('/list/the-only-existing-list/new_item', data={'new-item': first_item_text})
-        self.client.post('/list/the-only-existing-list/new_item', data={'new-item': second_item_text})
 
-        response_text = self.client.get('/list/the-only-existing-list').content.decode()
-        self.assertIn(first_item_text, response_text)
-        self.assertIn(second_item_text, response_text)
+        first_list = List.objects.create()
+        second_list = List.objects.create()
+
+        self.client.post(f'/list/{first_list.id}/new_item', data={'new-item': first_item_text})
+        self.client.post(f'/list/{second_list.id}/new_item', data={'new-item': second_item_text})
+
+        first_list_content = self.client.get(f'/list/{first_list.id}/').content.decode()
+        self.assertIn(first_item_text, first_list_content)
+        self.assertNotIn(second_item_text, first_list_content)
+        self.assertIn(
+            second_item_text,
+            self.client.get(f'/list/{second_list.id}/').content.decode()
+        )
+
+
+    def test_list_in_the_context(self):
+        list_ = List.objects.create()
+        response = self.client.get(f'/list/{list_.id}/')
+        self.assertEqual(response.context['list'], list_)
 
 
 class AddItemTest(TestCase):
     def test_POST_save_items(self):
         new_item_text = 'buy milk'
-        response = self.client.post('/list/the-only-existing-list/new_item', data={'new-item': new_item_text})
+        list_ = List.objects.create()
+        response = self.client.post(f'/list/{list_.id}/new_item', data={'new-item': new_item_text})
         self.assertEqual(Item.objects.count(), 1)
 
         new_item = Item.objects.first()
@@ -42,8 +58,11 @@ class AddItemTest(TestCase):
 
 
     def test_redirect_after_POST(self):
-        response = self.client.post('/list/the-only-existing-list/new_item', data={'new-item': 'buy milk'})
-        self.assertRedirects(response, '/list/the-only-existing-list')
+        response = self.client.post(f'/list/new', data={'new-item': 'buy milk'})
+        list_ = List.objects.first()
+        self.assertRedirects(response, f'/list/{list_.id}/')
+        response = self.client.post(f'/list/{list_.id}/new_item', data={'new-item': 'buy milk 2'})
+        self.assertRedirects(response, f'/list/{list_.id}/')
 
 
 class ItemListTest(TestCase):
