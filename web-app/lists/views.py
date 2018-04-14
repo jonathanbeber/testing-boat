@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from lists.models import Item
+from lists.models import Item, List
 
 def home_page(request):
     return render(
@@ -17,5 +17,7 @@ def view_list(request):
     )
 
 def new_item(request):
-    Item(text=request.POST['new-item']).save()
+    new_item_list = List()
+    new_item_list.save()
+    Item(text=request.POST['new-item'], list=new_item_list).save()
     return redirect('/list/the-only-existing-list')
