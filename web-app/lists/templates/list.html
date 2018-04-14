@@ -4,7 +4,7 @@
     </head>
     <body>
         <h1>To-Do List</h1>
-        <form method="POST" action="/list/the-only-existing-list/new_item">
+        <form method="POST" action="/list/{{ list.id }}/new_item">
             <input name="new-item" id="new-item-box" placeholder="insert a new item"/>
             {% csrf_token %}
         </form>
