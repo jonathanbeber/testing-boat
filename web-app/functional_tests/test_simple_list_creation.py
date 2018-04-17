@@ -1,49 +1,7 @@
-import os
-import time
-
-from django.test import LiveServerTestCase
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from .base import FunctionalTest
 
 
-class NewVisitorTest(LiveServerTestCase):
-    def setUp(self):
-        self.browser = self._get_a_browser()
-
-
-    def _get_a_browser(self):
-        options = webdriver.ChromeOptions()
-        options.add_argument('--no-sandbox')
-        return webdriver.Chrome('/home/developer/chromedriver', options=options)
-
-
-    def tearDown(self):
-        self.browser.quit()
-
-
-    def _get_input_box(self):
-        return self.browser.find_element_by_id("new-item-box")
-
-
-    def _set_new_item(self, text):
-        input_box = self._get_input_box()
-        input_box.send_keys(text)
-        input_box.send_keys(Keys.ENTER)
-
-
-    def _check_item(self, text):
-        self.assertIn(
-            text,
-            [row.text for row in self._get_todo_rows()]
-        )
-
-
-    def _get_todo_rows(self):
-        todo_list = self.browser.find_element_by_id('todo-list')
-        return todo_list.find_elements_by_tag_name('tr')
-
-
+class NewVisitorTest(FunctionalTest):
     def test_include_a_list_and_get_a_permanent_link(self):
         # Enter the site
         self.browser.get(self.live_server_url)
@@ -75,11 +33,6 @@ class NewVisitorTest(LiveServerTestCase):
         # check if the new item is in the page
         self._check_item('1. ' + first_task_text)
         self._check_item('2. ' + second_task_text)
-
-        self.fail('Finish it!')
-        # Go to personal URL
-
-        # check if 'buy milk' and 'Clean the car' are in a to-do list
 
 
     def test_unique_url(self):
@@ -119,22 +72,4 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotIn(
             '1. ' + user_a_item_text,
             [row.text for row in self._get_todo_rows()]
-        )
-
-
-    def test_layout_ans_styling(self):
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-        input_box = self._get_input_box()
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2,
-            512,
-            delta=10
-        )
-        self._set_new_item('new item')
-        input_box = self._get_input_box()
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2,
-            512,
-            delta=10
         )
