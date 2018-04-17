@@ -12,10 +12,13 @@ class ItemValidationTest(FunctionalTest):
         self._set_new_item('')
 
         # Get an error message
-        self.assertEqual(
-            self._get_item_by_id('error-message').text,
-            'Invalid item'
+        self._wait_for(
+            lambda: self.assertEqual(
+                self._get_item_by_id('error-message').text,
+                'Invalid item'
+            )
         )
+
 
         # Try with a valid item
         valid_item = 'valid item'
@@ -28,9 +31,11 @@ class ItemValidationTest(FunctionalTest):
 
 
         # Get the same error message
-        self.assertEqual(
-            self._get_item_by_id('error-message').text,
-            'Invalid item'
+        self._wait_for(
+            lambda: self.assertEqual(
+                self._get_item_by_id('error-message').text,
+                'Invalid item'
+            )
         )
 
         # include a new valid item and its ok

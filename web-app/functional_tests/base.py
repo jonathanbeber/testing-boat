@@ -4,7 +4,11 @@ import time
 from django.test import LiveServerTestCase
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.common.keys import Keys
+
+
+MAX_WAIT = 5
 
 
 class FunctionalTest(LiveServerTestCase):
@@ -49,3 +53,16 @@ class FunctionalTest(LiveServerTestCase):
     def _get_todo_rows(self):
         todo_list = self.browser.find_element_by_id('todo-list')
         return todo_list.find_elements_by_tag_name('tr')
+
+
+    def _wait_for(self, fn):
+        start_time = time.time()
+        while True:
+            try:
+                return fn()
+            except(AssertionError, NoSuchElementException, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                else:
+                    time.sleep(0.5)
+
