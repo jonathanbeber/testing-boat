@@ -37,8 +37,8 @@ class ListViewTest(TestCase):
         first_list = List.objects.create()
         second_list = List.objects.create()
 
-        self.client.post(f'/list/{first_list.id}/new_item', data={'new-item': first_item_text})
-        self.client.post(f'/list/{second_list.id}/new_item', data={'new-item': second_item_text})
+        self.client.post(f'/list/{first_list.id}/', data={'new-item': first_item_text})
+        self.client.post(f'/list/{second_list.id}/', data={'new-item': second_item_text})
 
         first_list_content = self.client.get(f'/list/{first_list.id}/').content.decode()
         self.assertIn(first_item_text, first_list_content)
@@ -59,7 +59,7 @@ class AddItemTest(TestCase):
     def test_POST_save_items(self):
         new_item_text = 'buy milk'
         list_ = List.objects.create()
-        response = self.client.post(f'/list/{list_.id}/new_item', data={'new-item': new_item_text})
+        response = self.client.post(f'/list/{list_.id}/', data={'new-item': new_item_text})
         self.assertEqual(Item.objects.count(), 1)
 
         new_item = Item.objects.first()
@@ -70,7 +70,7 @@ class AddItemTest(TestCase):
         response = self.client.post(f'/list/new', data={'new-item': 'buy milk'})
         list_ = List.objects.first()
         self.assertRedirects(response, f'/list/{list_.id}/')
-        response = self.client.post(f'/list/{list_.id}/new_item', data={'new-item': 'buy milk 2'})
+        response = self.client.post(f'/list/{list_.id}/', data={'new-item': 'buy milk 2'})
         self.assertRedirects(response, f'/list/{list_.id}/')
 
 

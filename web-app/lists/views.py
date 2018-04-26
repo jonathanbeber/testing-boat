@@ -13,18 +13,15 @@ def home_page(request):
 
 def view_list(request, list_name):
     list_ = List.objects.get(id=list_name)
+    if request.method == 'POST':
+        Item(text=request.POST['new-item'], list=list_).save()
+        return redirect(f'/list/{list_.id}/')
     items = Item.objects.filter(list=list_)
     return render(
         request,
         'list.html',
         {'items': items, 'list': list_}
     )
-
-
-def new_item(request, list_name):
-    new_item_list = List.objects.get(id=list_name)
-    Item(text=request.POST['new-item'], list=new_item_list).save()
-    return redirect(f'/list/{list_name}/')
 
 
 def new_list(request):
