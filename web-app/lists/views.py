@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.exceptions import ValidationError
 
 from lists.models import Item, List
 
@@ -28,5 +29,11 @@ def new_item(request, list_name):
 
 def new_list(request):
     new_list = List.objects.create()
-    Item(text=request.POST['new-item'], list=new_list).save()
+    item = Item(text=request.POST['new-item'], list=new_list)
+    try:
+        item.full_clean()
+    except ValidationError:
+        new_list.delete()
+        return render(request, 'home.html', {'error': 'Invalid item description'})
+    item.save()
     return redirect(f'/list/{new_list.id}/')

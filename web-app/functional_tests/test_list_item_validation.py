@@ -15,7 +15,7 @@ class ItemValidationTest(FunctionalTest):
         self._wait_for(
             lambda: self.assertEqual(
                 self._get_item_by_id('error-message').text,
-                'Invalid item'
+                'Invalid item description'
             )
         )
 

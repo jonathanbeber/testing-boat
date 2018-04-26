@@ -5,11 +5,21 @@ from lists.views import home_page
 from lists.models import Item, List
 
 
+ERROR_MESSAGE = 'Invalid item description'
+
+
 class HomePageTest(TestCase):
     def test_home_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
+
+
+    def test_errors_in_home_page(self):
+        response = self.client.post(f'/list/new', data={'new-item': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertContains(response, ERROR_MESSAGE)
 
 
 class ListViewTest(TestCase):
@@ -62,3 +72,9 @@ class AddItemTest(TestCase):
         self.assertRedirects(response, f'/list/{list_.id}/')
         response = self.client.post(f'/list/{list_.id}/new_item', data={'new-item': 'buy milk 2'})
         self.assertRedirects(response, f'/list/{list_.id}/')
+
+
+    def test_empty_items_arent_saved(self):
+        response = self.client.post(f'/list/new', data={'new-item': ''})
+        self.assertEqual(List.objects.count(), 0)
+        self.assertEqual(Item.objects.count(), 0)
