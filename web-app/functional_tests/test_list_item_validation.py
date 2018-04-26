@@ -27,14 +27,14 @@ class ItemValidationTest(FunctionalTest):
 
 
         # Try insert an empty item again
-        self._set_new_item(' ')
+        self._set_new_item('')
 
 
         # Get the same error message
         self._wait_for(
             lambda: self.assertEqual(
                 self._get_item_by_id('error-message').text,
-                'Invalid item'
+                'Invalid item description'
             )
         )
 
