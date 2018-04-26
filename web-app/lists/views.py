@@ -13,14 +13,20 @@ def home_page(request):
 
 def view_list(request, list_name):
     list_ = List.objects.get(id=list_name)
+    error = None
     if request.method == 'POST':
-        Item(text=request.POST['new-item'], list=list_).save()
-        return redirect(f'/list/{list_.id}/')
+        try:
+            item = Item(text=request.POST['new-item'], list=list_)
+            item.full_clean()
+            item.save()
+            return redirect(f'/list/{list_.id}/')
+        except ValidationError:
+            error = 'Invalid item description'
     items = Item.objects.filter(list=list_)
     return render(
         request,
         'list.html',
-        {'items': items, 'list': list_}
+        {'items': items, 'list': list_, 'error': error}
     )
 
 

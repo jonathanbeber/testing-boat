@@ -55,6 +55,14 @@ class ListViewTest(TestCase):
         self.assertEqual(response.context['list'], list_)
 
 
+    def test_new_items_in_the_list_cant_be_empty(self):
+        list_ = List.objects.create()
+        response = self.client.post(f'/list/{list_.id}/', data={'new-item': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'list.html')
+        self.assertContains(response, ERROR_MESSAGE)
+
+
 class AddItemTest(TestCase):
     def test_POST_save_items(self):
         new_item_text = 'buy milk'
@@ -74,7 +82,7 @@ class AddItemTest(TestCase):
         self.assertRedirects(response, f'/list/{list_.id}/')
 
 
-    def test_empty_items_arent_saved(self):
+    def test_empty_items_arent_saved_when_creating_a_list(self):
         response = self.client.post(f'/list/new', data={'new-item': ''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
