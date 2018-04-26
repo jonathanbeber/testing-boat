@@ -5,6 +5,10 @@ from django.core.exceptions import ValidationError
 from lists.models import Item, List
 
 class ItemListModelsTest(TestCase):
+    def test_list_absolute_url(self):
+        list_ = List.objects.create()
+        self.assertEqual(list_.get_absolute_url(), f'/list/{list_.id}/')
+
     def test_item_save(self):
         first_list = List()
         first_list.save()

@@ -19,7 +19,7 @@ def view_list(request, list_name):
             item = Item(text=request.POST['new-item'], list=list_)
             item.full_clean()
             item.save()
-            return redirect(f'/list/{list_.id}/')
+            return redirect(list_)
         except ValidationError:
             error = 'Invalid item description'
     items = Item.objects.filter(list=list_)
@@ -39,4 +39,4 @@ def new_list(request):
         new_list.delete()
         return render(request, 'home.html', {'error': 'Invalid item description'})
     item.save()
-    return redirect(f'/list/{new_list.id}/')
+    return redirect(new_list)
