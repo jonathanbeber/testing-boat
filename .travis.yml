@@ -6,6 +6,6 @@ before_script:
   - pip install -r web-app/requirements.txt
 script:
   - cd web-app &&
-    coverage run lists
+    coverage run manage.py lists
 after_success:
   - codecov
