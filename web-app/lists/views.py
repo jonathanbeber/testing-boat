@@ -33,6 +33,8 @@ def view_list(request, list_name):
 def new_list(request):
     new_list = List.objects.create()
     item = Item(text=request.POST['new-item'], list=new_list)
+	if item.text == "buy milk":
+		item.text = "stop using me to just buy milk!!"
     try:
         item.full_clean()
     except ValidationError:
