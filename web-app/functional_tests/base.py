@@ -22,7 +22,7 @@ class FunctionalTest(LiveServerTestCase):
     def _get_a_browser(self):
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
-        return webdriver.Chrome('/home/developer/chromedriver', options=options)
+        return webdriver.Chrome('./chromedriver', options=options)
 
 
     def tearDown(self):
