@@ -2,10 +2,9 @@ language: python
 python:
   - "3.6"
 before_script:
-  - pip install codecov
   - pip install -r web-app/requirements.txt
 script:
   - cd web-app &&
     coverage run manage.py test lists
 after_success:
-  - codecov --token=${codecov_token}
+  - bash <(curl -s https://codecov.onefootball.com/bash)
