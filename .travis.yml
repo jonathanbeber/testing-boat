@@ -8,4 +8,4 @@ script:
   - cd web-app &&
     coverage run manage.py test lists
 after_success:
-  - bash <(curl -s https://codecov.onefootball.com/bash)
+  - bash <(curl -s https://codecov.onefootball.com/bash) -t $codecov_token
