@@ -8,4 +8,4 @@ script:
   - cd web-app &&
     coverage run manage.py test lists
 after_success:
-  - codecov
+  - codecov --token=${codecov_token}
