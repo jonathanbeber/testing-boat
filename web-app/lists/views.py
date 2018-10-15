@@ -23,6 +23,8 @@ def view_list(request, list_name):
         except ValidationError:
             error = 'Invalid item description'
     items = Item.objects.filter(list=list_)
+    a, b = "using this variable", "not this one"
+    print("creating a new print here " + a)
     return render(
         request,
         'list.html',
