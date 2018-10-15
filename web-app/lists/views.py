@@ -29,7 +29,7 @@ def view_list(request, list_name):
     
     
     
-    "empty lines"
+    "empty lines and now suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuupeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer loooooooooooooooooooooooooooooooooooooong one! Come to me pep8"
     return render(
         request,
         'list.html',
