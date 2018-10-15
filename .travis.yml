@@ -2,6 +2,9 @@ language: python
 python:
   - "3.6"
 before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
   - pip install coverage
   - pip install -r web-app/requirements.txt
 script:
@@ -9,3 +12,4 @@ script:
     coverage run manage.py test lists
 after_success:
   - bash <(curl -s https://codecov.onefootball.com/bash) -t $codecov_token
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
