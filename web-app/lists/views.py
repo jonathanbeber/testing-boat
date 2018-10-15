@@ -25,6 +25,11 @@ def view_list(request, list_name):
     items = Item.objects.filter(list=list_)
     a, b = "using this variable", "not this one"
     print("creating a new print here " + a)
+    
+    
+    
+    
+    "empty lines"
     return render(
         request,
         'list.html',
