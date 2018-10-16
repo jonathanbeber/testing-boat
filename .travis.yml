@@ -12,6 +12,4 @@ script:
     coverage run manage.py test lists
 after_success:
   - bash <(curl -s https://codecov.onefootball.com/bash) -t $codecov_token
-  - pwd
-  - ls -la
-  - ../cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --prefix $(pwd) coverage.xml
+  - ../cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --prefix $(pwd)/.coverage/
